@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by User (User) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--Prima Versione Schema: V0.1 del 16 Novembre 2010. (Pontellini Alberto).-->
+	<!--Versione Schema: V0.2 del 14 Dicembre 2010. (Pontellini Alberto).-->
+	<!--Opzioni Software della Macchina Integra con Piano CombiFlex.-->
+	<!---->
+	<!---->
+	<xs:complexType name="EntityCoreType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definizione del Tipo Base.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="ClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni del Morsetto del Banco di Lavoro.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:attribute name="MinimumSpace" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Distanza di sicurezza tra pinze e lavorazioni.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MinimumStaple" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Pinzaggio minimo della presa del pezzo con il morsetto. La misura deve garantire una buona tenuta del pezzo.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaximumStaple" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Pinzaggio massimo della presa del pezzo con il morsetto. La misura deve evitare che il pezzo urti contro lo stelo del morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaximumYOverhang" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Sbalzo massimo del pezzo dalla fine del pinzaggio. La misura deve garantire una buona lavorazione sul pezzo. La misura viene presa l'ungo l'asse Y (Up) del morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaximumXOverhang" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Sbalzo massimo del pezzo dalla fine del pinzaggio. La misura deve garantire una buona lavorazione sul pezzo. La misura viene presa l'ungo l'asse X (Sx o Dx) del morsetto. I morsetti interessati sono quelli alle estremita del pezzo.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaximumXWheelbase" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Interasse massimo del pezzo dal riferimento del morsetto in presa al successivo in presa. La misura deve garantire una buona lavorazione sul pezzo. La misura viene presa l'ungo l'asse X del sistema di riferimento dei morsetti.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SwapClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni del Morsetto durante lo scambio del Pezzo tra i Banchi di Lavoro.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="MinimumSpace" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Distanza di sicurezza tra pinze e lavorazioni.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="MinimumStaple" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Pinzaggio minimo della presa del pezzo con il morsetto. La misura deve garantire una buona tenuta del pezzo.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="LoadUnitClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni della Pinza del Caricatore.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="MinimumSpace" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Distanza di sicurezza tra le Pinze e le Morse del Banco di Lavoro.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ZQuoteLoadingPiece" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Quota Z di Carico Pezzi dal Caricatore al Banco di Lavoro. Lo 0 è sulla base del Pezzo, con un valore positivo si segue l'altezza del Pezzo.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Z1QuoteUnloadingPiece" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Prima Quota Z di Scarico Pezzi dal Caricatore al Banco di Lavoro. Lo 0 è sulla base del Pezzo, con un valore positivo si segue l'altezza del Pezzo.
+La Prima Quota è anche quella di default.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Z2QuoteUnloadingPiece" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Seconda Quota Z di Scarico Pezzi dal Caricatore al Banco di Lavoro. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Z3QuoteUnloadingPiece" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Terza Quota Z di Scarico Pezzi dal Caricatore al Banco di Lavoro. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="MinimumXOverhang " type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Sbalzo minimo del Pezzo sugli estremi delle morse su cui è possibile poter pinzare durante la fase di carico/scarico. Se lo sbalzo è minore allora si preferisce non pinzare perchè il pezzo si può rovinare.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="UnLoadPiece_Yp" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Offset in Y del Banco di Scarico. In funzione della sagomatura della Pinza Fissa è necessario scostare leggermente il Banco per evitare una probabile collisione tra la Pinza ed il Pezzo.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="WorkFieldType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni del Banco dei Morsetti.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:attribute name="A1PiecePositionEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione del posizionamento del Pezzo a Sinistra del Banco A.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="A2PiecePositionEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione del posizionamento del Pezzo a Destra del Banco A.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="D1PiecePositionEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione del posizionamento del Pezzo a Sinistra del Banco D.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="D2PiecePositionEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione del posizionamento del Pezzo a Destra del Banco D.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CarriageType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni del Carro del Banco dei Morsetti.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:attribute name="Y1GraphicCalibration" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Offset di Taratura Grafica del Carro rispetto il suo SR. Ogni carro a una sua Y, quindi in visualizzazione i carri vengono visualizzati uno sopra l'altro. Questo offset di taratura grafica consente di visualizzare i carri a Y diverse.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Y2GraphicCalibration" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Offset di Taratura Grafica del Carro rispetto il suo SR.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Y3GraphicCalibration" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Offset di Taratura Grafica del Carro rispetto il suo SR.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ToolOptimizationType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni dell'Ottimizzazione Utensili.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:attribute name="Enabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione all'Ottimizzazione Utensili.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ToolPathOptEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione all'Ottimizzazione del Percorso Utensile.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ToolPathOptDefValue" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Valore  di Default dell'Abilitazione all'Ottimizzazione del Percorso Utensile.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ProfileHeadDownEnabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione  all'Ottimizzazione di Testa Bassa nel caso in cui due Profilature su due Pezzi in F4 o F5 possono essere eseguite senza alzare la Testa Mandrino.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PHeadType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Opzioni della Testa/Mandrino di Lavoro.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="MaxHeadLength" type="xs:double" use="required">
+			<xs:annotation>
+				<xs:documentation>Massima Lunghezza della Testa Mandrino come proiezzione in X. Questo valore deve essere preso in assenza dell'utensile. Tale dato unito all'ingombro degli utensili consente il calcolo automatico dell'anticollisione tra due pezzi sullo stesso Banco di Lavoro.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<!---->
+	<xs:element name="CombiFlexConfig">
+		<xs:annotation>
+			<xs:documentation>Elemento Root della Configurazione Software di Gestione del Piano CombiFlex.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="EntityCoreType">
+					<xs:sequence>
+						<xs:element name="Clamp" type="ClampType">
+							<xs:annotation>
+								<xs:documentation>Configurazione delle Opzioni del Morsetto del Banco di Lavoro.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SwapClamp" type="SwapClampType">
+							<xs:annotation>
+								<xs:documentation>Definizione delle Opzioni del Morsetto durante lo scambio del Pezzo tra i Banchi di Lavoro.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LoadUnitClamp" type="LoadUnitClampType">
+							<xs:annotation>
+								<xs:documentation>Configurazione delle Opzioni della Pinza del Caricatore.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WorkField" type="WorkFieldType">
+							<xs:annotation>
+								<xs:documentation>Configurazione del Banco dei Morsetti.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Carriage" type="CarriageType">
+							<xs:annotation>
+								<xs:documentation>Configurazione del Carro del Banco dei Morsetti.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ToolOptimization" type="ToolOptimizationType">
+							<xs:annotation>
+								<xs:documentation>Configurazione dell'Ottimizzazione Utensili.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PHead" type="PHeadType">
+							<xs:annotation>
+								<xs:documentation>Configurazione dei parametri della Testa Mandrino.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

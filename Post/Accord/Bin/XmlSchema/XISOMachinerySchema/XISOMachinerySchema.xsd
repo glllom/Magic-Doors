@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by User (User) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--Prima Versione Schema: V0.1 del 06 Ottobre 2010. (Pontellini Alberto).-->
+	<!--Versione Schema: V0.3 del 14 Dicembre 2010. (Pontellini Alberto).-->
+	<!--Configurazione Fisica della Macchina Integra con Piano CombiFlex.-->
+	<!---->
+	<xs:complexType name="EntityCoreType">
+		<xs:annotation>
+			<xs:documentation>Definizione della descrizione di ogni entità di configurazione.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="TRAType">
+		<xs:annotation>
+			<xs:documentation>Definizione delle Coordinate di Traslazione di un Sistema di Riferimento Trigonometrico Ortogonale.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="X" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Coordinata X.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Y" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Coordinata Y.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Z" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Coordinata Z.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ROTType">
+		<xs:annotation>
+			<xs:documentation>Definizione degli Angoli di Rotazione del Sistema di Riferimento TRAType.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="X" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Angolo di rotazione attorno a X.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Y" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Angolo di rotazione attorno a Y.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Z" type="xs:double" default="0">
+						<xs:annotation>
+							<xs:documentation>Angolo di rotazione attorno a Z.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CS0Type">
+		<xs:annotation>
+			<xs:documentation>Definizione del Sistema di Riferimento Trigonometrico Ortogonale. (Coordinate System 0).</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="TRA" type="TRAType">
+						<xs:annotation>
+							<xs:documentation>Coordinate di Traslazione del Sistema di Riferimento corrente rispetto al SR del padre.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ROT" type="ROTType">
+						<xs:annotation>
+							<xs:documentation>Angoli di Rotazione del Sistema di Riferimento corrente rispetto al SR del padre.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MS0Type">
+		<xs:annotation>
+			<xs:documentation>Definizione generica del tipo asse di movimento. (Movement System 0).</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="AxisApplicationPoint" type="TRAType">
+						<xs:annotation>
+							<xs:documentation>Punto d'applicazione dell'asse rispetto al SR del padre. Non è lo 0 di Taratura.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AxisDirection">
+						<xs:annotation>
+							<xs:documentation>Direzione della retta passante per il punto d'applicazione dell'asse.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="X"/>
+								<xs:enumeration value="Y"/>
+								<xs:enumeration value="Z"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="Type" use="required">
+					<xs:annotation>
+						<xs:documentation>Dichiarazione del tipo di asse.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Linear"/>
+							<xs:enumeration value="Rotative"/>
+							<xs:enumeration value="Pneumatic"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="MachineryCoreType">
+		<xs:annotation>
+			<xs:documentation>Definizione del tipo di riferimento di ogni entità fisica della configurazione.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="CS0" type="CS0Type">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento dell'entità corrente rispetto il SR dell'entità padre. (Coordinate System 0).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="Name" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>Nome.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Description" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>Descrizione.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Enabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AxisCoreType">
+		<xs:annotation>
+			<xs:documentation>Definizione del tipo di riferimento di ogni entità di tipo asse della configurazione.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="MS0" type="MS0Type" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento di un asse di movimento. (Movement System 0).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="CombiClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Morsetto Base del Banco.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:attribute name="DxDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="SxDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="UpDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DownDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DzUpperDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione in Z del piattello superiore del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DzLowerDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione in Z del piattello inferiore del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DiameterSteam" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Diametro dello stelo del Morsetto. Lo stelo movimenta il piattello superiore del Morsetto rispetto quello inferiore.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="LengthSteam" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Lunghezza dello stelo. La lunghezza determina l'escursione massima del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="CxSteamPosition" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Offset del centro in X dello stelo rispetto il Sistema di Riferimento del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="CySteamPosition" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Offset del centro in Y dello stelo rispetto il Sistema di Riferimento del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiExclusionClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Morsetto Escludibile del Banco.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CombiClampType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiFixedClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Morsetto Fisso del Banco.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CombiClampType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="CombiWorkFieldType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Banco dei Morsetti. Contenitore fisico e logico dei morsetti del carro.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="CS1" type="CS0Type">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento di CORREZIONE dello 0 Pezzo rispetto lo 0 Pezzo TEORICO. (Coordinate System 1). Questo secondo Sistema di Riferimento nasce dall'esigenza di dover spostare di poco lo 0 Pezzo.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiExclusionWorkFieldType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Banco dei Morsetti Escludibili.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CombiWorkFieldType">
+				<xs:sequence>
+					<xs:element name="Clamps" type="CombiExclusionClampType" maxOccurs="20">
+						<xs:annotation>
+							<xs:documentation>Morsetti.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiFixedWorkFieldType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Banco dei Morsetti Fissi.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CombiWorkFieldType">
+				<xs:sequence>
+					<xs:element name="Clamps" type="CombiFixedClampType" maxOccurs="20">
+						<xs:annotation>
+							<xs:documentation>Morsetti.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="CombiExclusionClampCarriageType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Carro del Banco dei Morsetti Escludibili.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="WorkField" type="CombiExclusionWorkFieldType">
+						<xs:annotation>
+							<xs:documentation>Banco dei Morsetti.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiFixedDualClampCarriageType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Carro del Banco dei Morsetti Fissi di tipo DUAL.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="WorkField" type="CombiFixedWorkFieldType" minOccurs="2" maxOccurs="2">
+						<xs:annotation>
+							<xs:documentation>Banco dei Morsetti.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiFixedMonoClampCarriageType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Carro del Banco dei Morsetti Fissi di tipo MONO.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="WorkField" type="CombiFixedWorkFieldType">
+						<xs:annotation>
+							<xs:documentation>Banco dei Morsetti.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="CombiDualWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano di Lavoro di tipo DUAL.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="CS0_LoadUnit" type="CS0Type">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento dell'entità corrente rispetto il SR dell'entità del Carico Pezzi. (Coordinate System 0).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Y1Axis">
+						<xs:annotation>
+							<xs:documentation>Asse Y.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="ClampCarriage" type="CombiExclusionClampCarriageType">
+											<xs:annotation>
+												<xs:documentation>Carro del Banco dei Morsetti Escludibili.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Y2Axis">
+						<xs:annotation>
+							<xs:documentation>Asse Y.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="ClampCarriage" type="CombiFixedDualClampCarriageType">
+											<xs:annotation>
+												<xs:documentation>Carro del Banco dei Morsetti Fissi.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Y3Axis">
+						<xs:annotation>
+							<xs:documentation>Asse Y.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="ClampCarriage" type="CombiExclusionClampCarriageType">
+											<xs:annotation>
+												<xs:documentation>Carro del Banco dei Morsetti Escludibili.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiMonoWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano di Lavoro di tipo MONO.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="CS0_LoadUnit" type="CS0Type">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento dell'entità corrente rispetto il SR dell'entità del Carico Pezzi. (Coordinate System 0).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Y1Axis">
+						<xs:annotation>
+							<xs:documentation>Asse Y.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="ClampCarriage" type="CombiExclusionClampCarriageType">
+											<xs:annotation>
+												<xs:documentation>Carro del Banco dei Morsetti Escludibili.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Y2Axis">
+						<xs:annotation>
+							<xs:documentation>Asse Y.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="ClampCarriage" type="CombiFixedMonoClampCarriageType">
+											<xs:annotation>
+												<xs:documentation>Carro del Banco dei Morsettii Fissi.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CombiComplexWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano di Lavoro Polivalente: DUAL o MONO.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:choice>
+					<xs:element name="Dual" type="CombiDualWorkTableType">
+						<xs:annotation>
+							<xs:documentation>Piano di Lavoro di tipo DUAL.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Mono" type="CombiMonoWorkTableType">
+						<xs:annotation>
+							<xs:documentation>Piano di Lavoro di tipo MONO.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="FXPilotWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano a Barre di tipo PILOT: Piano Semi-Automatico.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FXMaticWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano a Barre di tipo MATIC: Piano Automatico.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FXComplexWorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Piano a Barre Polivalente: PILOT o MATIC.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:choice>
+					<xs:element name="Pilot" type="FXPilotWorkTableType">
+						<xs:annotation>
+							<xs:documentation>Piano a Barre di tipo PILOT: Piano Semi-Automatico.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Matic" type="FXMaticWorkTableType">
+						<xs:annotation>
+							<xs:documentation>Piano a Barre di tipo MATIC: Piano Automatico.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="LoadUnitClampType">
+		<xs:annotation>
+			<xs:documentation>Definizione della Pinza del Carico Pezzi.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:attribute name="DxDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="SxDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="UpDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DownDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Dimensione/Ingombro del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="DepthDimension" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Profondità del Morsetto rispetto il suo Sistema di riferimento.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MinWheelbase" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Interasse Minimo tra la Pinza Corrente e quella Precedente. Un valore negativo indica che la Pinza Corrente è a sinistra di quella precedente.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="MaxWheelbase" type="xs:double" use="required">
+					<xs:annotation>
+						<xs:documentation>Interasse Massimo tra la Pinza Corrente e quella Precedente. Un valore negativo indica che la corsa della Pinza Corrente si sviluppa verso sinistra.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LoadUnitType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Carico Pezzi. Area fisica dove prelevare i pezzi per il caricamento sul WorkPlan.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="CS1" type="CS0Type">
+						<xs:annotation>
+							<xs:documentation>Sistema di riferimento dello 0 Pezzo rispetto il CS0 del Carico Pezzi. (Coordinate System 1). Questo secondo Sistema di Riferimento nasce dall'esigenza di dover descrivere uno 0 Pezzo scostato dallo 0 Fisico.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Clamp" type="LoadUnitClampType">
+						<xs:annotation>
+							<xs:documentation>Pinza di Riferimento del Carico Pezzi.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Axis" minOccurs="2" maxOccurs="2">
+						<xs:annotation>
+							<xs:documentation>Assi di movimentazione delle Pinze Supplementari del Carico Pezzi. Le Pinze Supplementari si riferiscono alla prima, quella di riferimento.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="AxisType">
+									<xs:sequence>
+										<xs:element name="Clamp" type="LoadUnitClampType">
+											<xs:annotation>
+												<xs:documentation>Pinza Supplementare del Carico Pezzi.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:complexType name="BasementType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Basamento della Macchina Utensile.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="MachineryCoreType">
+				<xs:sequence>
+					<xs:element name="WorkTable" maxOccurs="2">
+						<xs:annotation>
+							<xs:documentation>Piano di Lavoro.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="WorkTableType"/>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="LoadUnit" type="LoadUnitType">
+						<xs:annotation>
+							<xs:documentation>Carico Pezzi.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="WorkTableType">
+		<xs:annotation>
+			<xs:documentation>Definizione del Tavolo di Lavoro, corridoio su cui poggiano il Piano di Lavoro CombiFlex e/o Piano a Barre FX.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="EntityCoreType">
+				<xs:sequence>
+					<xs:element name="CombiFlex" type="CombiComplexWorkTableType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Piano a Barre Polivalente (MultiPurpose): PILOT o MATIC.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FX" type="FXComplexWorkTableType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Piano di Lavoro Polivalente (MultiPurpose): DUAL o MONO.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="Enabled" type="xs:boolean" use="required">
+					<xs:annotation>
+						<xs:documentation>Abilitazione del Morsetto.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AxisType">
+		<xs:annotation>
+			<xs:documentation>Definizione dell'asse di movimento tra entità fisiche.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AxisCoreType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<!---->
+	<xs:element name="Machinery">
+		<xs:annotation>
+			<xs:documentation>Elemento Root. Sottoinsieme della configurazione di Xilog.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="EntityCoreType">
+					<xs:sequence>
+						<xs:element name="CS0Xilog" type="CS0Type">
+							<xs:annotation>
+								<xs:documentation>Sistema di riferimento dello 0 Xilog rispetto il SR dello 0 CN. </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Basement">
+							<xs:annotation>
+								<xs:documentation>Basamento della Macchina Utensile.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="BasementType"/>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Name" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>Nome.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Description" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>Descrizione.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

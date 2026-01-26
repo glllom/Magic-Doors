@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by User (User) -->
+<xs:schema xmlns="XISOConfigSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="XISOConfigSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<!--Versione Schema: V0.1 del 16 Marzo 2009. (Pontellini Alberto).-->
+	<!---->
+	<xs:element name="XISOConfig">
+		<xs:annotation>
+			<xs:documentation>Elemento Root. Sottoinsieme della configurazione di Xilog.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="EntityCoreType">
+					<xs:sequence>
+						<xs:element ref="Config"/>
+						<xs:element name="Fields">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="Field" maxOccurs="16"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<xs:complexType name="EntityCoreType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>Definizione del Tipo Base.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<!---->
+	<xs:element name="Config">
+		<xs:annotation>
+			<xs:documentation>Configurazione generale.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="EntityCoreType">
+					<xs:attribute name="OProg" use="required">
+						<xs:annotation>
+							<xs:documentation>Origine di programmazione. Front / Back.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Front"/>
+								<xs:enumeration value="Back"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="SpecGraph" type="xs:boolean" use="required">
+						<xs:annotation>
+							<xs:documentation>Specularità della grafica.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Field">
+		<xs:annotation>
+			<xs:documentation>Descrizione dell'area di lavoro. Area fisica della macchina.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="EntityCoreType">
+					<xs:attribute name="AreaCode" use="required">
+						<xs:annotation>
+							<xs:documentation>AREA_A / AREA_B / ...</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:length value="1" fixed="false"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="SpecX" type="xs:boolean" use="required">
+						<xs:annotation>
+							<xs:documentation>Specularità dell'area in X.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="SpecY" type="xs:boolean" use="required">
+						<xs:annotation>
+							<xs:documentation>Specularità dell'area in Y.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="OrgX" type="xs:double" use="required">
+						<xs:annotation>
+							<xs:documentation>Origine X dell'area corrente rispetto lo 0 di Xilog.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="OrgY" type="xs:double" use="required">
+						<xs:annotation>
+							<xs:documentation>Origine Y dell'area corrente rispetto lo 0 di Xilog.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="OrgZ" type="xs:double" use="required">
+						<xs:annotation>
+							<xs:documentation>Origine Z dell'area corrente rispetto lo 0 di Xilog.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Width" type="xs:double" use="required">
+						<xs:annotation>
+							<xs:documentation>Larghezza dell'area di lavoro.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Height" type="xs:double" use="required">
+						<xs:annotation>
+							<xs:documentation>Altezza dell'area di lavoro.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

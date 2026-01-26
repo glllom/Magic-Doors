@@ -1,0 +1,2 @@
+class PriorityClientInterface:
+    pass

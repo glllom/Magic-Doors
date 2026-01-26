@@ -1,0 +1,335 @@
+SECTION User //********** Sezione User **************************
+
+// ******************************************************************************
+//      CONFIGURAZIONE PLC
+// ******************************************************************************
+
+// ---> Numero elementi usati in struttura
+#define         NUM_ELEM        32      // N° elementi array Qte
+#define         NUM_CUT         5       // N° elementi array cut
+#define         NUM_TESTE       4       // N° elementi array teste
+#define         NUM_EASYSET     4       // N° elementi array piano EASYSET (MANINA)
+
+// ---> Tipo Macchina
+typedef struct {
+    CHKSUM  byte    cbx_mch;
+    CHKSUM  byte    tbx_assi;
+} SCM_mch;
+
+// ---> Parametri Testa
+typedef struct {
+// Mandrino principale
+    CHKSUM  byte    cbx_testa;
+    CHKSUM  byte    cbx_speed;
+    CHKSUM  byte    cbx_onboard;
+    CHKSUM  byte    cbx_cuffia;
+    CHKSUM  byte    cbx_cuffia_int;
+    CHKSUM  byte    cbx_accessori;
+    CHKSUM  byte    chk_vector;
+    CHKSUM  byte    chk_refrigmd;
+    CHKSUM  byte    chk_refrigutmd;
+    CHKSUM  byte    chk_tsp;
+    CHKSUM  byte    chk_ren;
+
+// Foratrice
+    CHKSUM  byte    chk_fora;
+    CHKSUM  byte    cbx_fora;
+// Testa BRC
+    CHKSUM  byte    cbx_brc;
+
+// Testa Power
+    CHKSUM  byte    cbx_testa_tre;
+    CHKSUM  byte    cbx_bmagaz;
+    CHKSUM  byte    cbx_bccolla;
+    CHKSUM  byte    chk_crullo;
+
+// Aggregato Lama
+    CHKSUM  byte    chk_lama;
+    CHKSUM  byte    cbx_lama;
+// Aggregato Mandrino Supplementare
+    CHKSUM  byte    chk_supp;
+    CHKSUM  byte    cbx_supp;
+    CHKSUM  byte    cbx_cuffia_supp;
+    CHKSUM  byte    cbx_cut_supp;
+// Aggrebgato Bordatore Basic;
+    CHKSUM  byte    chk_basic;
+    CHKSUM  byte    cbx_basic;
+// Opzionali
+    CHKSUM  byte    chk_ts_opz[6];
+    CHKSUM  byte    cbx_ts_opz[6];
+    CHKSUM  byte    tbx_ts_opz[6];
+} SCM_testa;
+
+// ---> Parametri CUT
+typedef struct {
+    CHKSUM  byte    chk_cutme;
+    CHKSUM  byte    chk_cuths;
+    CHKSUM  byte    chk_cuttr;
+    CHKSUM  byte    chk_cuttm;
+    CHKSUM  byte    cbx_cutme;
+    CHKSUM  byte    cbx_cuttr;
+    RETAIN  double  cut_QtaX[NUM_ELEM];
+    RETAIN  double  cut_QtaY[NUM_ELEM];
+    RETAIN  double  cut_QtaZ[NUM_ELEM];
+    RETAIN  double  cut_QtaC;
+} SCM_cut;
+
+// ---> Parametri Piano
+typedef struct {
+    CHKSUM  byte    cbx_piano;
+    CHKSUM  byte    cbx_typepm;
+
+    CHKSUM  byte    chk_morsetti;
+    CHKSUM  byte    chk_crotvent;
+    CHKSUM  byte    cbx_bar_a;
+    CHKSUM  byte    cbx_bar_b;
+    CHKSUM  byte    cbx_bar_c;
+    CHKSUM  byte    cbx_bar_d;
+    CHKSUM  byte    cbx_basi;
+    CHKSUM  byte    cbx_barfx;
+
+
+    CHKSUM  byte    chk_innalzatori;
+    CHKSUM  byte    chk_inndue;
+    CHKSUM  byte    chk_fcbatt;
+
+    CHKSUM  byte    chk_unload;
+    CHKSUM  byte    cbx_unload;
+    CHKSUM  byte    chk_nastro;
+
+    CHKSUM  byte    chk_load;
+    CHKSUM  byte    cbx_load;
+    CHKSUM  byte    tbx_load;
+
+} SCM_piano;
+
+// ---> Configura Allestimento
+typedef struct {
+    CHKSUM  byte    cbx_pigna;
+    CHKSUM  byte    cbx_sicurezza;
+    CHKSUM  byte    chk_tappeto;
+    CHKSUM  byte    pres_ped;
+    CHKSUM  dword   quotaZuno_SW;
+    CHKSUM  dword   quotaZdue_SW;
+    CHKSUM  dword   deltaZ_SW;
+    CHKSUM  dword   velLim_SW;
+    CHKSUM  byte    pres_band;
+    CHKSUM  byte    band_type;
+    CHKSUM  byte    cond_ae;
+    CHKSUM  byte    port_ae;
+    CHKSUM  byte    epp;
+
+    CHKSUM  byte    cbx_lubrif;
+    CHKSUM  byte    tbx_pmplub;
+    CHKSUM  word    tbx_timelub;
+} SCM_opz;
+
+// ---> Configura EASYSET (MANINA)
+typedef struct {
+    CHKSUM  double  tbx_torque_X[NUM_EASYSET];
+    CHKSUM  double  tbx_torque_Y[NUM_EASYSET];
+    CHKSUM  double  tbx_torque_ZUP[NUM_EASYSET];
+    CHKSUM  double  tbx_torque_ZDW[NUM_EASYSET];
+    CHKSUM  double  tbx_accdec_XYZ[NUM_EASYSET];
+    CHKSUM  double  tbx_jerk_XYZ[NUM_EASYSET];
+    CHKSUM  double  tbx_speed_XY[NUM_EASYSET];
+    CHKSUM  double  tbx_speed_Z[NUM_EASYSET];
+} SCM_pdla;
+
+// ---> Struttura Globale Configurazione Macchina
+typedef struct {
+    SCM_mch         mch;
+    SCM_testa       testa[NUM_TESTE];
+    SCM_cut         cut;
+    SCM_piano       piano;
+    SCM_pdla        easyset;
+    SCM_opz         opz;
+} SCM_cfg;
+
+// ******************************************************************************
+//      MEMORIE PER PIGNA
+// ******************************************************************************
+typedef struct {
+    byte    dispModi[8];        // Registri MODO
+    byte    dispAssi[16];       // Registri ASSI
+    byte    dispGruppi[16];     // Registri GRUPPO/TESTA
+    byte    idModi;             // Indice MODO corrente
+    byte    idAssi;             // Indice ASSE/GRUPPO/TESTA corrente
+    byte    numModi;            // Numero effettivo di modi visualizzati
+    byte    numAssi;            // Numero effettivo di assi visualizzati
+    byte    maskModi;           // Maschera visualiz. modi
+    byte    charModi[8];        // Caratteri visualiz. modi
+    word    maskAssi[4];        // Maschera visualiz. assi gruppo/testa
+    byte    charDisp[2];        // Caratteri visualizzati sui display
+} PIGNA;
+typedef struct
+{
+        double  tPosizioneX;
+RETAIN  double  tPosizioneAttualeX; // Aggiunta da Sintesi
+        byte    tFlagsX;
+        byte    tStato_FrenoX;
+        byte    tPosizionataX;       // Aggiunta da Sintesi
+} t_X;
+
+typedef struct
+{
+        byte    tTipo;              // Aggiunta da Sintesi
+        double  tPosizioneY;
+RETAIN  double  tPosizioneAttualeY; // Aggiunta da Sintesi
+        string  tName[12];
+RETAIN  string  tNameAttuale[12];
+        double  tCodice;
+RETAIN  double  tCodiceAttuale;
+        byte    tFlagsY;
+        byte    tStato_FrenoY;
+        byte    tStato_Morsetto;
+        byte    tStato_Piattello;
+        byte    tNumero_Pezzo;
+        double  tAngolo_Rotazione;
+RETAIN  double  tAng_RotazAttuale;
+        byte    tPosizionataY;       // Aggiunta da Sintesi
+        byte    tAng_Rotaz_OK;
+        byte    tNome_OK;
+} t_Y;
+
+typedef struct
+{
+    t_X    X;
+    t_Y    Y[10];
+} t_TRAVERSA;
+
+
+
+// ---> Geometria del piano (aggiunta da Sintesi)
+typedef struct
+{
+    byte  tNumTraverse;
+    byte  tNumVentose;
+    byte  tDirezBasi;
+    dword tAltPiano;
+    dword tLargPiano;
+    dword tAltTraversa;
+    dword tLargTraversa;
+    dword tAltVentosa;
+    dword tLargVentosa;
+} t_GEOMETRIA;
+
+// ******************************************************************************
+//      COMANDI PIANO MOTORIZZATO
+// ******************************************************************************
+
+typedef struct {
+    RETAIN dword kMinNC;
+    RETAIN dword kMinPC;
+    RETAIN dword kMaxNC;
+    RETAIN dword kMaxPC;
+           byte  cPosC;
+           byte  sPosC;
+} t_BarC;
+
+typedef struct {
+           byte  clnkBtn;
+           byte  cStl;
+           byte  sStl;
+           byte  cPtl;
+           byte  sPtl;
+           byte  sBrkS;
+           byte  cMovS;
+    RETAIN byte  kEnabS;
+    RETAIN dword kIngNS;
+    RETAIN dword kIngPS;
+    RETAIN dword kFcNS;
+    RETAIN dword kFcPS;
+           dword sPosNS;
+           dword sPosPS;
+           dword cPosS;
+} t_Support;
+
+typedef struct {
+    RETAIN byte  kType;
+    RETAIN dword kIngNR;
+    RETAIN dword kIngPR;
+} t_RefStp;
+
+typedef struct {
+    RETAIN byte  clnkArea;
+           byte  sBrkB;
+           byte  cMovB;
+    RETAIN byte  kEnabB;
+    RETAIN dword kIngNB;
+    RETAIN dword kIngPB;
+    RETAIN dword kFcNB;
+    RETAIN dword kFcPB;
+           dword sPosNB;
+           dword sPosPB;
+           dword cPosB;
+           dword kParkB;
+           t_Support    Sup[5];
+           t_RefStp     RefStp[5];
+} t_Bar;
+
+typedef struct {
+           dword kLimNA;
+           dword kLimPA;
+} t_Area;
+
+// ******************************************************************************
+//      CONFIGURAZIONE EASYSET (MANINA)
+// ******************************************************************************
+
+typedef struct{
+    double  ValX;
+    byte    DefX;
+} t_ManinaX;
+
+typedef struct{
+    double  ValY;
+    byte    DefY;
+} t_ManinaY;
+
+typedef struct{
+    t_ManinaX    PmX;
+    t_ManinaY    PmY[6];
+} tPIANOMANINA;
+
+t_Bar Bar[13];
+t_Area Area[5];
+
+t_BarC BarC[5];
+t_TRAVERSA Traversa[12];
+t_GEOMETRIA Geometria;
+
+RETAIN  tPIANOMANINA  PM[12];           // CONFIGURAZIONE EASYSET (MANINA)
+double                PM_Quota_app;     // CONFIGURAZIONE EASYSET (MANINA)
+
+// ******************************************************************************
+//      CONFIGURAZIONE MEMORIA PLC
+// ******************************************************************************
+
+#define         NUM_APP_EXK     64      // Numero registri EXK
+#define         NUM_APP_EYK     64      // Numero registri EYK
+#define         NUM_APP_EZK     64      // Numero registri EZK
+#define         NUM_CNFPLC      2       // Numero Elementi Configurazione PLC
+#define         NUM_CFG         128     // BYTE Configurazione PLC
+#define         NUM_DWCFG       128     // DWORD Configurazione PLC
+
+double          EXK[NUM_APP_EXK];       // Registri a doppia precisione
+double          EYK[NUM_APP_EYK];       // Registri a doppia precisione
+double          EZK[NUM_APP_EZK];       // Registri a doppia precisione
+
+SCM_cfg         cfg;                    // Area Dati Configurazione PLC
+PIGNA           Pigna;                  // Memorie per pigna
+
+byte            CFG[NUM_CFG];           // Byte globali per il PLC
+dword           DWCFG[NUM_DWCFG];       // Dword globali per il PLC
+
+PERSIST byte    Secondi;        // Contasecondi
+PERSIST byte    Minuti;         // Contaminuti
+PERSIST dword   Ore;            // Contaore
+
+dword           SIMWRITE[300];  // Dword scambio con simulatore (SimHW Legge)
+dword           SIMREAD[10];    // Dword scambio con simulatore (SimHW Scrive)
+
+RETAIN  dword   numblck[16];    // numero blocco canale corrente
+
+ENDSECTION User //*************** Sezione Applicativo ******************

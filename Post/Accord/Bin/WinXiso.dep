@@ -1,0 +1,13 @@
+========================================================================
+       WINXISO.EXE DEPENDENCIES
+========================================================================
+
+
+EVENT32.DLL
+XXL.DLL
+BAG32.DLL
+IOPGM32.DLL
+DBMS32.DLL
+EXTCYC32.DLL
+X3TYPES32.DLL
+MARKUP.DLL
