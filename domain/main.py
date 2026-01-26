@@ -1,6 +1,6 @@
 import os
 
-from data_loaders import ExcelOrderLoader, get_all_models_parameters, get_bom_components
+from data_loaders import *
 from search import *
 
 # Get the directory where main.py is located
@@ -54,13 +54,26 @@ def process_order(order_num):
             if customizer.tag == "double_door_mod":
                 divide_to_double_door(item, customizer)
 
+
+
     # Create full base BOM
     for item in current_order.items:
         item.bom = get_bom_components(item.sku)
 
-    # ToDo: modify BOM according to customizers
     for item in current_order.items:
-        print(item)
+        structure_changers = get_all_component_changers()
+        for customizer in item.customizers:
+            match customizer.tag:
+                case "structure_changer":
+                    for changer in structure_changers:
+                        if changer.sku == customizer.sku and item.sku in changer.compatible_models:
+                            for component in changer.components_to_remove:
+                                item.remove_bom_item(component)
+                            for component in changer.components_to_add:
+                                item.add_bom_item(*component)
+                case _:
+                    pass
+
     # find cover materials
     order_summary["materials"] = suit_cover_materials(current_order)
 
@@ -83,7 +96,7 @@ def process_order(order_num):
                 order_summary["hardware"][component.sku] += (component.qty *
                                                              (2 if item.second_panel_size else 1))
             # elif component.tag == "hardware_accessories":
-    # print(order_summary)
+    print(order_summary)
     return order_summary
 
 

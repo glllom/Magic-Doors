@@ -20,7 +20,7 @@ class Item:
         self.panel_size = (0, 0)
         self.second_panel_size = None
         self.undercut = undercut or 0
-        self.bom = {}
+        self.bom = []
 
     def __repr__(self):
         return f"Item(number={self.number}, sku='{self.sku}', width={self.width}, height={self.height}, panel_size={self.panel_size}, customizers={self.customizers})"
@@ -28,6 +28,12 @@ class Item:
         self.panel_size = (width, height)
     def set_second_panel_size(self, width, height):
         self.second_panel_size = (width, height)
+
+    def remove_bom_item(self, sku):
+        self.bom[:] = [item for item in self.bom if item.sku != sku]
+
+    def add_bom_item(self, sku, qty, tag=None):
+        self.bom.append(BOMItem(sku, qty, tag))
 
 class Customizer:
     """Modifier class to represent an additional component for an item"""
@@ -64,5 +70,22 @@ class BOMItem:
 
     def __repr__(self):
         return f"BOMItem(sku='{self.sku}', qty={self.qty}, tag='{self.tag}')"
+
+class ComponentChanger:
+    def __init__(self, sku, compatible_models, components_to_remove, components_to_add):
+        self.sku = sku
+        self.compatible_models = compatible_models
+        self.components_to_remove = components_to_remove
+        self.components_to_add = components_to_add
+
+    def add_component_to_remove(self, components_to_remove):
+        self.components_to_remove += components_to_remove
+
+    def add_component_to_add(self, components_to_add):
+        self.components_to_add += components_to_add
+
+    def __repr__(self):
+        return f"ComponentChanger(sku='{self.sku}', compatible_models={self.compatible_models}, components_to_remove={self.components_to_remove}, components_to_add={self.components_to_add})"
+
 
 

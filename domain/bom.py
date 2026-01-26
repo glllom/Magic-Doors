@@ -1,1 +1,0 @@
-# BOM domain model

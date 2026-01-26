@@ -1,5 +1,5 @@
 import openpyxl
-from classes import Order, Item, Customizer, BOMItem, Material
+from classes import *
 
 
 class ExcelOrderLoader:
@@ -24,6 +24,7 @@ class ExcelOrderLoader:
 
         current_item = None
         customizers = get_all_customizers()
+        item_num = None
         for row in ws.iter_rows(min_row=2, values_only=True):
             if not any(row):
                 continue
@@ -31,6 +32,7 @@ class ExcelOrderLoader:
             pos_num = row[0]
             sku = row[1]
             if pos_num is not None:
+                item_num = int(pos_num)
                 current_item = None
                 continue
 
@@ -41,7 +43,7 @@ class ExcelOrderLoader:
                     direction = row[6]
                     opening = row[7]
                     undercut = row[8]
-                    current_item = Item(None, sku, width, height, direction, opening, undercut)
+                    current_item = Item(item_num, sku, width, height, direction, opening, undercut)
                     order.items.append(current_item)
                 else:
                     if sku in customizers:
@@ -119,3 +121,29 @@ def get_all_customizers():
     for row in ws.iter_rows(min_row=2, values_only=True):
         customizers[row[2]] = (Customizer(row[1], row[2], row[3], row[4], row[5], row[6]))
     return customizers
+
+def get_all_component_changers():
+    wb = openpyxl.load_workbook("sku_0.1.xlsx", data_only=True)
+    ws = wb["Component Changers"]
+    component_changers = []
+    current_sku = None
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        compatible_models = row[3].split(",") if row[3] else []
+        components_to_remove = [row[4]] if row[4] else []
+        components_to_add = [(row[5], row[6], row[7])] if row[5] else []
+        if row[1]:
+            current_sku = row[1]
+            component_changers.append(ComponentChanger(sku=row[1],
+                                                               compatible_models=compatible_models,
+                                                               components_to_remove=components_to_remove,
+                                                               components_to_add=components_to_add))
+        else:
+            if components_to_add:
+                component_changers[len(component_changers)-1].components_to_add.extend(components_to_add)
+            if components_to_remove:
+                component_changers[len(component_changers)-1].components_to_remove.extend(components_to_remove)
+
+
+    return component_changers
+
+# print(*get_all_component_changers(), sep="\n")
